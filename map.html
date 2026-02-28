@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcite SitAware — The Map</title>
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/5.0/esri/themes/light/main.css" id="esriThemeLight">
+  <link rel="stylesheet" href="css/app.css">
+  <style>
+    /* ArcGIS dark theme loaded dynamically via JS when needed */
+    html, body, calcite-shell { height: 100%; overflow: hidden; }
+  </style>
+</head>
+<body>
+
+<calcite-shell class="calcite-mode-light">
+
+  <!-- ===== Header ===== -->
+  <calcite-navigation slot="header">
+    <calcite-navigation-logo
+      slot="logo"
+      heading="Calcite SitAware"
+      description="The Map"
+      icon="map"
+    ></calcite-navigation-logo>
+
+    <div slot="content-end" class="nav-actions">
+      <div class="state-picker-wrapper desktop-only">
+        <calcite-combobox
+          id="statePicker"
+          placeholder="Filter by state..."
+          selection-mode="multiple"
+          scale="s"
+          max-items="8"
+        ></calcite-combobox>
+      </div>
+      <calcite-action
+        id="themeToggle"
+        icon="moon"
+        text="Toggle theme"
+        scale="s"
+        appearance="transparent"
+        class="desktop-only"
+      ></calcite-action>
+      <calcite-button
+        icon-start="dashboard"
+        appearance="outline-fill"
+        scale="s"
+        class="desktop-only"
+        onclick="window.location.href='index.html'"
+      >The Brief</calcite-button>
+
+      <!-- Mobile hamburger -->
+      <calcite-action
+        id="mobileMenuBtn"
+        icon="hamburger"
+        text="Menu"
+        scale="s"
+        appearance="transparent"
+        class="mobile-only"
+      ></calcite-action>
+    </div>
+  </calcite-navigation>
+
+  <!-- ===== Desktop Side Panel ===== -->
+  <calcite-shell-panel slot="panel-start" display-mode="float" class="map-shell-panel" id="sidePanel">
+    <calcite-action-bar slot="action-bar" id="actionBar">
+      <calcite-action id="actionLayers" icon="layers" text="Layers" active></calcite-action>
+      <calcite-action id="actionFilter" icon="filter" text="Filters"></calcite-action>
+      <calcite-action id="actionInfo" icon="information" text="Details"></calcite-action>
+    </calcite-action-bar>
+
+    <!-- Layers Panel -->
+    <calcite-panel id="panelLayers" heading="Layers" description="Toggle map layers">
+      <div style="padding: 8px;">
+        <div class="layer-toggle">
+          <span class="layer-toggle-label">
+            <span class="layer-swatch" style="background: #c41e3a;"></span>
+            NWS Alerts
+          </span>
+          <calcite-switch id="toggleNws" checked></calcite-switch>
+        </div>
+        <div class="layer-toggle">
+          <span class="layer-toggle-label">
+            <span class="layer-swatch" style="background: #1e4a6d;"></span>
+            FEMA Declarations
+          </span>
+          <calcite-switch id="toggleFema" checked></calcite-switch>
+        </div>
+        <div class="layer-toggle">
+          <span class="layer-toggle-label">
+            <span class="layer-swatch" style="background: #e87722;"></span>
+            Active Wildfires
+          </span>
+          <calcite-switch id="toggleFires" checked></calcite-switch>
+        </div>
+        <div class="layer-toggle">
+          <span class="layer-toggle-label">
+            <span class="layer-swatch" style="background: #6d4c8d;"></span>
+            Earthquakes
+          </span>
+          <calcite-switch id="toggleQuakes" checked></calcite-switch>
+        </div>
+      </div>
+
+      <calcite-block heading="Summary" collapsible open icon-start="graph-bar">
+        <div class="summary-stats" id="summaryStats">
+          <div class="stat-box">
+            <div class="stat-value" id="statNws">—</div>
+            <div class="stat-label">NWS Alerts</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="statFema">—</div>
+            <div class="stat-label">FEMA Ops</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="statFires">—</div>
+            <div class="stat-label">Fires</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="statQuakes">—</div>
+            <div class="stat-label">Quakes</div>
+          </div>
+        </div>
+      </calcite-block>
+    </calcite-panel>
+
+    <!-- Filter Panel (hidden until activated) -->
+    <calcite-panel id="panelFilter" heading="Filters" description="Refine map data" hidden>
+      <div style="padding: 8px;">
+        <calcite-label>
+          State Filter
+          <calcite-combobox
+            id="statePickerPanel"
+            placeholder="All states..."
+            selection-mode="multiple"
+            scale="s"
+            max-items="6"
+          ></calcite-combobox>
+        </calcite-label>
+
+        <calcite-block heading="NWS Severity" collapsible open icon-start="exclamation-mark-triangle" style="margin-top: 8px;">
+          <calcite-label layout="inline">
+            <calcite-checkbox id="filterNwsExtreme" checked></calcite-checkbox>
+            Extreme
+          </calcite-label>
+          <calcite-label layout="inline">
+            <calcite-checkbox id="filterNwsSevere" checked></calcite-checkbox>
+            Severe
+          </calcite-label>
+          <calcite-label layout="inline">
+            <calcite-checkbox id="filterNwsModerate" checked></calcite-checkbox>
+            Moderate
+          </calcite-label>
+          <calcite-label layout="inline">
+            <calcite-checkbox id="filterNwsMinor"></calcite-checkbox>
+            Minor
+          </calcite-label>
+        </calcite-block>
+
+        <calcite-block heading="Earthquake Magnitude" collapsible open icon-start="pin-tear" style="margin-top: 8px;">
+          <calcite-label>
+            Minimum magnitude
+            <calcite-slider
+              id="filterQuakeMag"
+              min="2.5"
+              max="8"
+              step="0.5"
+              value="4.0"
+              label-handles
+              snap
+            ></calcite-slider>
+          </calcite-label>
+        </calcite-block>
+      </div>
+    </calcite-panel>
+
+    <!-- Detail Panel (hidden until feature click) -->
+    <calcite-flow id="detailFlow">
+      <calcite-flow-item id="panelDetail" heading="Feature Details" hidden>
+        <calcite-action slot="header-actions-end" icon="x" text="Close" id="closeDetail"></calcite-action>
+        <div id="detailContent" style="padding: 12px;">
+          <div class="empty-state">Click a feature on the map to view details</div>
+        </div>
+      </calcite-flow-item>
+    </calcite-flow>
+  </calcite-shell-panel>
+
+  <!-- ===== Map ===== -->
+  <div id="viewDiv"></div>
+
+  <!-- ===== Mobile FAB ===== -->
+  <calcite-fab
+    class="map-fab mobile-only"
+    id="mobileFab"
+    icon="filter"
+    text="Layers & Filters"
+    text-enabled
+    scale="l"
+  ></calcite-fab>
+
+  <!-- ===== Mobile Sheet (layers/filters) ===== -->
+  <calcite-sheet id="mobileFilterSheet" display-mode="float" position="block-end" class="map-mobile-sheet">
+    <calcite-panel heading="Layers & Filters" closable id="mobileFilterPanel">
+      <div style="padding: 12px;">
+        <calcite-label>
+          Filter by State
+          <calcite-combobox
+            id="statePickerMobile"
+            placeholder="Select states..."
+            selection-mode="multiple"
+            scale="s"
+            max-items="6"
+          ></calcite-combobox>
+        </calcite-label>
+
+        <calcite-block heading="Layers" collapsible open style="margin-top: 8px;">
+          <div class="layer-toggle">
+            <span class="layer-toggle-label">
+              <span class="layer-swatch" style="background: #c41e3a;"></span>
+              NWS Alerts
+            </span>
+            <calcite-switch id="toggleNwsMobile" checked></calcite-switch>
+          </div>
+          <div class="layer-toggle">
+            <span class="layer-toggle-label">
+              <span class="layer-swatch" style="background: #1e4a6d;"></span>
+              FEMA Declarations
+            </span>
+            <calcite-switch id="toggleFemaMobile" checked></calcite-switch>
+          </div>
+          <div class="layer-toggle">
+            <span class="layer-toggle-label">
+              <span class="layer-swatch" style="background: #e87722;"></span>
+              Active Wildfires
+            </span>
+            <calcite-switch id="toggleFiresMobile" checked></calcite-switch>
+          </div>
+          <div class="layer-toggle">
+            <span class="layer-toggle-label">
+              <span class="layer-swatch" style="background: #6d4c8d;"></span>
+              Earthquakes
+            </span>
+            <calcite-switch id="toggleQuakesMobile" checked></calcite-switch>
+          </div>
+        </calcite-block>
+
+        <div style="margin-top: 12px;">
+          <calcite-button
+            icon-start="dashboard"
+            width="full"
+            appearance="outline"
+            onclick="window.location.href='index.html'"
+          >Back to Brief</calcite-button>
+        </div>
+      </div>
+    </calcite-panel>
+  </calcite-sheet>
+
+  <!-- ===== Mobile Detail Sheet ===== -->
+  <calcite-sheet id="mobileDetailSheet" display-mode="float" position="block-end" class="map-mobile-sheet">
+    <calcite-panel heading="Details" closable id="mobileDetailPanel">
+      <div id="mobileDetailContent" style="padding: 12px;">
+        <div class="empty-state">Tap a feature on the map</div>
+      </div>
+    </calcite-panel>
+  </calcite-sheet>
+
+  <!-- ===== Mobile Menu Sheet ===== -->
+  <calcite-sheet id="mobileSheet" display-mode="float" width-scale="s" position="inline-end">
+    <calcite-panel heading="Menu" closable id="mobilePanel">
+      <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+        <calcite-button
+          icon-start="dashboard"
+          width="full"
+          onclick="window.location.href='index.html'"
+        >The Brief</calcite-button>
+        <calcite-button
+          id="themeToggleMobile"
+          icon-start="moon"
+          appearance="outline"
+          width="full"
+        >Toggle Theme</calcite-button>
+      </div>
+    </calcite-panel>
+  </calcite-sheet>
+
+  <!-- ===== Toast ===== -->
+  <calcite-alert id="toastAlert" kind="success" icon="check-circle" placement="bottom-end" auto-close auto-close-duration="medium">
+    <span slot="title">Data Updated</span>
+    <span slot="message" id="toastMessage">All feeds refreshed.</span>
+  </calcite-alert>
+
+</calcite-shell>
+
+<script src="js/data.js"></script>
+<script src="https://js.arcgis.com/5.0/"></script>
+<script src="js/map.js"></script>
+
+</body>
+</html>

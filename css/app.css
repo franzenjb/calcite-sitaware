@@ -280,6 +280,149 @@ calcite-navigation {
   }
 }
 
+/* ===================================================================
+   MAP PAGE STYLES
+   =================================================================== */
+
+/* --- Map Container --- */
+#viewDiv {
+  width: 100%;
+  height: 100%;
+  background: var(--dragon-bg);
+}
+
+/* --- Map Shell Panel --- */
+.map-shell-panel {
+  --calcite-shell-panel-width: 340px;
+}
+
+/* --- Layer Toggle List --- */
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.layer-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.layer-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* --- Feature Detail Panel --- */
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.detail-header calcite-icon {
+  flex-shrink: 0;
+}
+.detail-title {
+  font-family: var(--dragon-body);
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  font-size: 13px;
+}
+.detail-label {
+  color: var(--dragon-text-muted);
+  font-weight: 500;
+}
+.detail-value {
+  font-weight: 400;
+}
+.detail-value.mono {
+  font-family: var(--dragon-data);
+}
+
+/* --- Summary Stats in Panel --- */
+.summary-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 8px 0;
+}
+.stat-box {
+  text-align: center;
+  padding: 8px;
+  background: var(--dragon-bg);
+  border-radius: 4px;
+}
+.stat-value {
+  font-family: var(--dragon-data);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--dragon-text);
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--dragon-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Map filter chips --- */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+/* --- Mobile FAB --- */
+.map-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+/* --- Mobile Map Sheet --- */
+.map-mobile-sheet calcite-panel {
+  max-height: 60vh;
+}
+
+/* --- Map Legend Dot --- */
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+/* --- Responsive: Map Mobile --- */
+@media (max-width: 768px) {
+  .map-shell-panel {
+    display: none !important;
+  }
+  .map-fab {
+    display: block;
+  }
+}
+@media (min-width: 769px) {
+  .map-fab {
+    display: none;
+  }
+  .map-mobile-sheet {
+    display: none;
+  }
+}
+
 /* --- Utility --- */
 .visually-hidden {
   position: absolute;
