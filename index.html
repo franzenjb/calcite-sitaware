@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcite SitAware — The Brief</title>
+  <script type="module" src="https://js.arcgis.com/calcite-components/5.0"></script>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<calcite-shell class="calcite-mode-light">
+
+  <!-- ===== Header ===== -->
+  <calcite-navigation slot="header">
+    <calcite-navigation-logo
+      slot="logo"
+      heading="Calcite SitAware"
+      description="Situational Awareness"
+      icon="dashboard"
+    ></calcite-navigation-logo>
+
+    <!-- Desktop: State picker + actions -->
+    <div slot="content-end" class="nav-actions">
+      <div class="state-picker-wrapper desktop-only">
+        <calcite-combobox
+          id="statePicker"
+          placeholder="Filter by state..."
+          selection-mode="multiple"
+          scale="s"
+          max-items="8"
+        ></calcite-combobox>
+      </div>
+      <calcite-action
+        id="themeToggle"
+        icon="moon"
+        text="Toggle theme"
+        scale="s"
+        appearance="transparent"
+        class="desktop-only"
+      ></calcite-action>
+      <calcite-action
+        id="refreshBtn"
+        icon="refresh"
+        text="Refresh data"
+        scale="s"
+        appearance="transparent"
+        class="desktop-only"
+      ></calcite-action>
+      <calcite-button
+        id="openMapBtn"
+        icon-start="map"
+        appearance="outline-fill"
+        scale="s"
+        class="desktop-only"
+        onclick="window.location.href='map.html'"
+      >Open Map</calcite-button>
+
+      <!-- Mobile hamburger -->
+      <calcite-action
+        id="mobileMenuBtn"
+        icon="hamburger"
+        text="Menu"
+        scale="s"
+        appearance="transparent"
+        class="mobile-only"
+      ></calcite-action>
+    </div>
+  </calcite-navigation>
+
+  <!-- ===== Mobile Menu Sheet ===== -->
+  <calcite-sheet id="mobileSheet" display-mode="float" width-scale="s" position="inline-end">
+    <calcite-panel heading="Menu" closable id="mobilePanel">
+      <div style="padding: 12px;">
+        <calcite-label>
+          Filter by State
+          <calcite-combobox
+            id="statePickerMobile"
+            placeholder="Select states..."
+            selection-mode="multiple"
+            scale="s"
+            max-items="6"
+          ></calcite-combobox>
+        </calcite-label>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+          <calcite-button
+            icon-start="map"
+            width="full"
+            onclick="window.location.href='map.html'"
+          >Open Map</calcite-button>
+          <calcite-button
+            id="themeToggleMobile"
+            icon-start="moon"
+            appearance="outline"
+            width="full"
+          >Toggle Theme</calcite-button>
+          <calcite-button
+            id="refreshBtnMobile"
+            icon-start="refresh"
+            appearance="outline"
+            width="full"
+          >Refresh Data</calcite-button>
+        </div>
+      </div>
+    </calcite-panel>
+  </calcite-sheet>
+
+  <!-- ===== Main Content ===== -->
+  <div class="brief-content">
+
+    <!-- Loading state -->
+    <div id="loadingState" style="text-align: center; padding: 48px 0;">
+      <calcite-loader label="Loading situational data..." type="indeterminate"></calcite-loader>
+    </div>
+
+    <!-- Content (hidden until data loads) -->
+    <div id="briefContent" style="display: none;">
+
+      <!-- 1. Status Banner -->
+      <div class="status-banner" id="statusBanner"></div>
+
+      <!-- 2. Needs Action -->
+      <div class="needs-action-section" id="needsActionSection"></div>
+
+      <!-- 3. Weather Outlook -->
+      <div class="section-block" id="weatherSection"></div>
+
+      <!-- 4. Active Operations -->
+      <div class="section-block" id="opsSection"></div>
+
+      <!-- 5. Fire Monitor -->
+      <div class="section-block" id="fireSection"></div>
+
+      <!-- 6. Seismic Monitor -->
+      <div class="section-block" id="quakeSection"></div>
+
+      <!-- 7. Data Freshness -->
+      <div class="data-freshness" id="dataFreshness"></div>
+
+    </div>
+  </div>
+
+  <!-- ===== Toast Alerts ===== -->
+  <calcite-alert id="toastAlert" kind="success" icon="check-circle" placement="bottom-end" auto-close auto-close-duration="medium">
+    <span slot="title">Data Updated</span>
+    <span slot="message" id="toastMessage">All feeds refreshed successfully.</span>
+  </calcite-alert>
+
+</calcite-shell>
+
+<script src="js/data.js"></script>
+<script src="js/brief.js"></script>
+
+</body>
+</html>

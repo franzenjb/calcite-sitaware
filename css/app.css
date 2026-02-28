@@ -1,0 +1,291 @@
+/* ===================================================================
+   Calcite SitAware — Dragon Tokens + Calcite Theming
+   =================================================================== */
+
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+Pro:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* --- Dragon Design Tokens --- */
+:root {
+  /* Brand */
+  --dragon-red: #ED1B2E;
+  --dragon-red-hover: #C41225;
+  --dragon-red-press: #A00E1E;
+  --dragon-black: #1a1a1a;
+  --dragon-white: #ffffff;
+
+  /* Warm Neutrals */
+  --dragon-cream: #f7f5f2;
+  --dragon-gray-900: #2d2d2d;
+  --dragon-gray-700: #4a4a4a;
+  --dragon-gray-500: #737373;
+  --dragon-gray-300: #a3a3a3;
+  --dragon-gray-100: #e5e5e5;
+
+  /* Functional */
+  --dragon-alert: #c41e3a;
+  --dragon-success: #2d5a27;
+  --dragon-caution: #b8860b;
+  --dragon-info: #1e4a6d;
+  --dragon-fire: #e87722;
+  --dragon-quake: #6d4c8d;
+
+  /* Typography */
+  --dragon-headline: 'Libre Baskerville', Georgia, serif;
+  --dragon-body: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+  --dragon-data: 'IBM Plex Mono', Consolas, monospace;
+
+  /* Derived (light mode defaults) */
+  --dragon-bg: var(--dragon-cream);
+  --dragon-surface: var(--dragon-white);
+  --dragon-text: var(--dragon-black);
+  --dragon-text-secondary: var(--dragon-gray-700);
+  --dragon-text-muted: var(--dragon-gray-500);
+  --dragon-border: var(--dragon-gray-100);
+
+  /* Calcite Brand Override */
+  --calcite-color-brand: #ED1B2E;
+  --calcite-color-brand-hover: #C41225;
+  --calcite-color-brand-press: #A00E1E;
+}
+
+/* --- Dark Mode --- */
+.calcite-mode-dark {
+  --dragon-bg: #1a1816;
+  --dragon-surface: #302d2a;
+  --dragon-text: var(--dragon-white);
+  --dragon-text-secondary: var(--dragon-gray-100);
+  --dragon-text-muted: var(--dragon-gray-300);
+  --dragon-border: #3a3632;
+}
+
+/* --- Anti-FOUC --- */
+calcite-shell:not([calcite-hydrated]) {
+  visibility: hidden;
+}
+
+/* --- Base Layout --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--dragon-body);
+  background: var(--dragon-bg);
+  color: var(--dragon-text);
+}
+
+/* --- Brief Content Area --- */
+.brief-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* --- Status Banner --- */
+.status-banner {
+  margin-bottom: 16px;
+}
+.status-banner calcite-notice {
+  width: 100%;
+}
+
+/* --- Needs Action Cards --- */
+.needs-action-section {
+  margin-bottom: 20px;
+}
+.needs-action-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.needs-action-grid calcite-card {
+  --calcite-card-border-color: var(--dragon-border);
+}
+.needs-action-grid calcite-card[data-source="fema"] {
+  border-left: 4px solid var(--dragon-info);
+}
+.needs-action-grid calcite-card[data-source="nws"] {
+  border-left: 4px solid var(--dragon-alert);
+}
+.needs-action-grid calcite-card[data-source="fires"] {
+  border-left: 4px solid var(--dragon-fire);
+}
+.needs-action-grid calcite-card[data-source="quakes"] {
+  border-left: 4px solid var(--dragon-quake);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-header calcite-icon {
+  flex-shrink: 0;
+}
+.card-headline {
+  font-family: var(--dragon-body);
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--dragon-text-muted);
+}
+
+/* --- Section Blocks --- */
+.section-block {
+  margin-bottom: 8px;
+}
+.section-block calcite-block {
+  --calcite-block-border-color: var(--dragon-border);
+}
+
+/* --- List Items --- */
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.item-primary {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.item-secondary {
+  font-size: 13px;
+  color: var(--dragon-text-muted);
+  white-space: nowrap;
+}
+.item-detail {
+  font-size: 12px;
+  color: var(--dragon-text-muted);
+  margin-top: 2px;
+}
+
+/* --- Magnitude display --- */
+.mag-display {
+  font-family: var(--dragon-data);
+  font-weight: 600;
+  font-size: 18px;
+  min-width: 48px;
+  text-align: center;
+}
+
+/* --- Acreage display --- */
+.acres-display {
+  font-family: var(--dragon-data);
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* --- Data Freshness Footer --- */
+.data-freshness {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  padding: 12px 0;
+  font-size: 12px;
+  color: var(--dragon-text-muted);
+  border-top: 1px solid var(--dragon-border);
+  margin-top: 16px;
+}
+.data-freshness .feed-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.data-freshness .feed-item.stale {
+  color: var(--dragon-alert);
+  font-weight: 600;
+}
+
+/* --- Empty State --- */
+.empty-state {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--dragon-text-muted);
+  font-size: 14px;
+}
+
+/* --- State Picker --- */
+.state-picker-wrapper {
+  min-width: 200px;
+}
+.state-picker-wrapper calcite-combobox {
+  width: 100%;
+}
+
+/* --- Section heading counter chip --- */
+.section-count {
+  margin-left: 8px;
+}
+
+/* --- Show All link --- */
+.show-all-link {
+  display: block;
+  text-align: center;
+  padding: 8px;
+  font-size: 13px;
+  color: var(--dragon-red);
+  cursor: pointer;
+  font-weight: 500;
+}
+.show-all-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Navigation tweaks --- */
+calcite-navigation {
+  --calcite-navigation-background-color: var(--dragon-surface);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --- Responsive: Mobile (<=768px) --- */
+@media (max-width: 768px) {
+  .brief-content {
+    padding: 12px 8px;
+  }
+  .nav-actions .desktop-only {
+    display: none;
+  }
+  .state-picker-wrapper {
+    min-width: 160px;
+  }
+}
+
+/* --- Responsive: Desktop (>768px) --- */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+  .needs-action-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .needs-action-grid calcite-card {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 280px;
+  }
+}
+
+/* --- Utility --- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
