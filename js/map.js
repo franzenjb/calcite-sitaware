@@ -497,8 +497,8 @@
     const link = document.getElementById('esriThemeLight');
     if (link) {
       link.href = isDark
-        ? 'https://js.arcgis.com/5.0/esri/themes/dark/main.css'
-        : 'https://js.arcgis.com/5.0/esri/themes/light/main.css';
+        ? 'https://js.arcgis.com/4.31/esri/themes/dark/main.css'
+        : 'https://js.arcgis.com/4.31/esri/themes/light/main.css';
     }
   }
 
