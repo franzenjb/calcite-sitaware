@@ -86,6 +86,7 @@
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
         '<path d="M16 2C11 9 4 13 4 19A12 12 0 0028 19C28 13 21 9 16 2Z" ' +
         'fill="rgb(' + r + ',' + g + ',' + b + ')" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>' +
+        '<path d="M16 10C14 14 11 16 11 19A5 5 0 0021 19C21 16 18 14 16 10Z" fill="rgba(255,255,180,0.55)"/>' +
         '</svg>'
       );
     }
