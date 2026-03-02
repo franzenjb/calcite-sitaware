@@ -76,28 +76,28 @@
       <div style="padding: 8px;">
         <div class="layer-toggle">
           <span class="layer-toggle-label">
-            <span class="layer-swatch" style="background: #c41e3a;"></span>
+            <svg class="layer-icon" width="16" height="16" viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="2" fill="rgba(196,30,58,0.25)" stroke="rgba(196,30,58,0.8)" stroke-width="1.5"/></svg>
             NWS Alerts
           </span>
           <calcite-switch id="toggleNws" checked></calcite-switch>
         </div>
         <div class="layer-toggle">
           <span class="layer-toggle-label">
-            <span class="layer-swatch" style="background: #1e4a6d;"></span>
+            <svg class="layer-icon" width="16" height="16" viewBox="0 0 32 32"><path d="M16 2L30 16L16 30L2 16Z" fill="#1e4a6d" stroke="white" stroke-width="1.5"/><line x1="16" y1="10" x2="16" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="23" r="1.5" fill="white"/></svg>
             FEMA Declarations
           </span>
           <calcite-switch id="toggleFema" checked></calcite-switch>
         </div>
         <div class="layer-toggle">
           <span class="layer-toggle-label">
-            <span class="layer-swatch" style="background: #e87722;"></span>
+            <svg class="layer-icon" width="16" height="16" viewBox="0 0 32 32"><path d="M16 2C11 9 4 13 4 19A12 12 0 0028 19C28 13 21 9 16 2Z" fill="#e87722" stroke="white" stroke-width="1.5"/></svg>
             Active Wildfires
           </span>
           <calcite-switch id="toggleFires" checked></calcite-switch>
         </div>
         <div class="layer-toggle">
           <span class="layer-toggle-label">
-            <span class="layer-swatch" style="background: #6d4c8d;"></span>
+            <svg class="layer-icon" width="16" height="16" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#6d4c8d" stroke-width="1" opacity="0.25"/><circle cx="16" cy="16" r="10" fill="none" stroke="#6d4c8d" stroke-width="1.5" opacity="0.45"/><circle cx="16" cy="16" r="6" fill="#6d4c8d" stroke="white" stroke-width="1.5"/></svg>
             Earthquakes
           </span>
           <calcite-switch id="toggleQuakes" checked></calcite-switch>
@@ -190,6 +190,33 @@
   <!-- ===== Map ===== -->
   <div id="viewDiv"></div>
 
+  <!-- ===== Map Legend ===== -->
+  <div id="mapLegend" class="map-legend desktop-only">
+    <div class="map-legend-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <calcite-icon icon="legend" scale="s"></calcite-icon>
+      <span>Legend</span>
+      <calcite-icon icon="chevron-down" scale="s" class="map-legend-chevron"></calcite-icon>
+    </div>
+    <div class="map-legend-body">
+      <div class="map-legend-item">
+        <svg width="14" height="14" viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="2" fill="rgba(196,30,58,0.25)" stroke="rgba(196,30,58,0.8)" stroke-width="1.5"/></svg>
+        <span>NWS Weather Alerts</span>
+      </div>
+      <div class="map-legend-item">
+        <svg width="14" height="14" viewBox="0 0 32 32"><path d="M16 2L30 16L16 30L2 16Z" fill="#1e4a6d" stroke="white" stroke-width="1.5"/></svg>
+        <span>FEMA Declarations</span>
+      </div>
+      <div class="map-legend-item">
+        <svg width="14" height="14" viewBox="0 0 32 32"><path d="M16 2C11 9 4 13 4 19A12 12 0 0028 19C28 13 21 9 16 2Z" fill="#e87722" stroke="white" stroke-width="1.5"/></svg>
+        <span>Active Wildfires</span>
+      </div>
+      <div class="map-legend-item">
+        <svg width="14" height="14" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#6d4c8d" stroke-width="1" opacity="0.25"/><circle cx="16" cy="16" r="10" fill="none" stroke="#6d4c8d" stroke-width="1.5" opacity="0.45"/><circle cx="16" cy="16" r="6" fill="#6d4c8d" stroke="white" stroke-width="1.5"/></svg>
+        <span>Earthquakes</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== Mobile FAB ===== -->
   <calcite-fab
     class="map-fab mobile-only"
@@ -218,28 +245,28 @@
         <calcite-block heading="Layers" collapsible open style="margin-top: 8px;">
           <div class="layer-toggle">
             <span class="layer-toggle-label">
-              <span class="layer-swatch" style="background: #c41e3a;"></span>
+              <svg class="layer-icon" width="16" height="16" viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="2" fill="rgba(196,30,58,0.25)" stroke="rgba(196,30,58,0.8)" stroke-width="1.5"/></svg>
               NWS Alerts
             </span>
             <calcite-switch id="toggleNwsMobile" checked></calcite-switch>
           </div>
           <div class="layer-toggle">
             <span class="layer-toggle-label">
-              <span class="layer-swatch" style="background: #1e4a6d;"></span>
+              <svg class="layer-icon" width="16" height="16" viewBox="0 0 32 32"><path d="M16 2L30 16L16 30L2 16Z" fill="#1e4a6d" stroke="white" stroke-width="1.5"/><line x1="16" y1="10" x2="16" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="23" r="1.5" fill="white"/></svg>
               FEMA Declarations
             </span>
             <calcite-switch id="toggleFemaMobile" checked></calcite-switch>
           </div>
           <div class="layer-toggle">
             <span class="layer-toggle-label">
-              <span class="layer-swatch" style="background: #e87722;"></span>
+              <svg class="layer-icon" width="16" height="16" viewBox="0 0 32 32"><path d="M16 2C11 9 4 13 4 19A12 12 0 0028 19C28 13 21 9 16 2Z" fill="#e87722" stroke="white" stroke-width="1.5"/></svg>
               Active Wildfires
             </span>
             <calcite-switch id="toggleFiresMobile" checked></calcite-switch>
           </div>
           <div class="layer-toggle">
             <span class="layer-toggle-label">
-              <span class="layer-swatch" style="background: #6d4c8d;"></span>
+              <svg class="layer-icon" width="16" height="16" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#6d4c8d" stroke-width="1" opacity="0.25"/><circle cx="16" cy="16" r="10" fill="none" stroke="#6d4c8d" stroke-width="1.5" opacity="0.45"/><circle cx="16" cy="16" r="6" fill="#6d4c8d" stroke="white" stroke-width="1.5"/></svg>
               Earthquakes
             </span>
             <calcite-switch id="toggleQuakesMobile" checked></calcite-switch>

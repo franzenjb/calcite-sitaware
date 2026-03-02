@@ -51,7 +51,7 @@
     view = new MapView({
       container: 'viewDiv',
       map: map,
-      center: [-98.5, 39.8],
+      center: [-90, 35],
       zoom: 4,
       popup: { autoOpenEnabled: false },
       ui: { components: ['zoom', 'compass'] }
@@ -74,6 +74,97 @@
         }
       });
     }
+
+    // ---- SVG Marker Generators ----
+
+    function svgUrl(svg) {
+      return 'data:image/svg+xml,' + encodeURIComponent(svg);
+    }
+
+    function fireMarkerUrl(r, g, b) {
+      return svgUrl(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
+        '<path d="M16 2C11 9 4 13 4 19A12 12 0 0028 19C28 13 21 9 16 2Z" ' +
+        'fill="rgb(' + r + ',' + g + ',' + b + ')" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>' +
+        '</svg>'
+      );
+    }
+
+    function quakeMarkerUrl(r, g, b) {
+      var c = 'rgb(' + r + ',' + g + ',' + b + ')';
+      return svgUrl(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
+        '<circle cx="16" cy="16" r="14" fill="none" stroke="' + c + '" stroke-width="1" opacity="0.25"/>' +
+        '<circle cx="16" cy="16" r="10" fill="none" stroke="' + c + '" stroke-width="1.5" opacity="0.45"/>' +
+        '<circle cx="16" cy="16" r="6" fill="' + c + '" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>' +
+        '</svg>'
+      );
+    }
+
+    function femaMarkerUrl(incidentType) {
+      var c = '%231e4a6d', w = 'rgba(255,255,255,0.9)';
+      var inner;
+      switch (incidentType) {
+        case 'Hurricane': case 'Typhoon': case 'Coastal Storm':
+          inner =
+            '<circle cx="16" cy="16" r="4" fill="' + c + '" stroke="' + w + '" stroke-width="1.5"/>' +
+            '<path d="M16 5A11 11 0 0124 9" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M27 16A11 11 0 0123 24" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M16 27A11 11 0 018 23" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M5 16A11 11 0 019 8" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>';
+          break;
+        case 'Tornado':
+          inner =
+            '<path d="M6 6h20M9 12h14M12 18h8M14.5 24h3" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>';
+          break;
+        case 'Fire':
+          inner =
+            '<path d="M16 3C12 9 6 12 6 17A10 10 0 0026 17C26 12 20 9 16 3Z" fill="' + c + '" stroke="' + w + '" stroke-width="1.5"/>';
+          break;
+        case 'Flood':
+          inner =
+            '<path d="M3 10Q9 4 16 10Q23 16 29 10" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M3 18Q9 12 16 18Q23 24 29 18" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M3 26Q9 20 16 26Q23 32 29 26" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>';
+          break;
+        case 'Severe Storm(s)': case 'Severe Ice Storm':
+          inner =
+            '<path d="M18 3L9 17h5L12 29L23 13h-5Z" fill="' + c + '" stroke="' + w + '" stroke-width="1.5"/>';
+          break;
+        case 'Snow':
+          inner =
+            '<line x1="16" y1="3" x2="16" y2="29" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<line x1="5" y1="9.5" x2="27" y2="22.5" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<line x1="5" y1="22.5" x2="27" y2="9.5" stroke="' + c + '" stroke-width="2.5" stroke-linecap="round"/>';
+          break;
+        case 'Earthquake':
+          inner =
+            '<circle cx="16" cy="16" r="6" fill="' + c + '" stroke="' + w + '" stroke-width="1.5"/>' +
+            '<circle cx="16" cy="16" r="11" fill="none" stroke="' + c + '" stroke-width="1.5" opacity="0.5"/>';
+          break;
+        default:
+          inner =
+            '<path d="M16 2L30 16L16 30L2 16Z" fill="' + c + '" stroke="' + w + '" stroke-width="1.5"/>' +
+            '<line x1="16" y1="10" x2="16" y2="19" stroke="' + w + '" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<circle cx="16" cy="23" r="1.5" fill="' + w + '"/>';
+      }
+      return svgUrl('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' + inner + '</svg>');
+    }
+
+    // State centroids (shared by FEMA rendering + territory zoom)
+    var STATE_CENTROIDS = {
+      AL:[32.8,-86.8],AK:[64.2,-152.5],AZ:[34.3,-111.7],AR:[34.8,-92.2],CA:[36.8,-119.4],
+      CO:[39.0,-105.5],CT:[41.6,-72.7],DE:[38.9,-75.5],FL:[27.8,-81.7],GA:[33.0,-83.5],
+      HI:[19.9,-155.6],ID:[44.1,-114.7],IL:[40.0,-89.0],IN:[39.8,-86.1],IA:[42.0,-93.5],
+      KS:[38.5,-98.3],KY:[37.8,-84.3],LA:[31.2,-91.9],ME:[45.4,-69.2],MD:[39.0,-76.6],
+      MA:[42.2,-71.5],MI:[44.3,-84.5],MN:[46.3,-94.2],MS:[32.7,-89.7],MO:[38.5,-92.3],
+      MT:[46.9,-110.4],NE:[41.5,-99.8],NV:[38.8,-116.4],NH:[43.7,-71.6],NJ:[40.1,-74.5],
+      NM:[34.5,-106.0],NY:[43.0,-75.5],NC:[35.6,-79.8],ND:[47.5,-100.5],OH:[40.4,-82.8],
+      OK:[35.5,-97.5],OR:[44.0,-120.5],PA:[41.2,-77.2],RI:[41.7,-71.5],SC:[34.0,-81.0],
+      SD:[44.5,-100.2],TN:[35.9,-86.4],TX:[31.5,-99.3],UT:[39.3,-111.7],VT:[44.0,-72.7],
+      VA:[37.5,-79.0],WA:[47.4,-120.7],WV:[38.6,-80.6],WI:[44.5,-89.8],WY:[43.0,-107.6],
+      DC:[38.9,-77.0],PR:[18.2,-66.5],VI:[18.3,-64.9],GU:[13.4,144.8],AS:[-14.3,-170.7],MP:[15.2,145.7]
+    };
 
     // ---- Render Functions ----
 
@@ -102,36 +193,21 @@
 
     function renderFemaLayer() {
       femaLayer.removeAll();
-      // State centroids for FEMA (state-level markers)
-      const centroids = {
-        AL:[32.8,-86.8],AK:[64.2,-152.5],AZ:[34.3,-111.7],AR:[34.8,-92.2],CA:[36.8,-119.4],
-        CO:[39.0,-105.5],CT:[41.6,-72.7],DE:[38.9,-75.5],FL:[27.8,-81.7],GA:[33.0,-83.5],
-        HI:[19.9,-155.6],ID:[44.1,-114.7],IL:[40.0,-89.0],IN:[39.8,-86.1],IA:[42.0,-93.5],
-        KS:[38.5,-98.3],KY:[37.8,-84.3],LA:[31.2,-91.9],ME:[45.4,-69.2],MD:[39.0,-76.6],
-        MA:[42.2,-71.5],MI:[44.3,-84.5],MN:[46.3,-94.2],MS:[32.7,-89.7],MO:[38.5,-92.3],
-        MT:[46.9,-110.4],NE:[41.5,-99.8],NV:[38.8,-116.4],NH:[43.7,-71.6],NJ:[40.1,-74.5],
-        NM:[34.5,-106.0],NY:[43.0,-75.5],NC:[35.6,-79.8],ND:[47.5,-100.5],OH:[40.4,-82.8],
-        OK:[35.5,-97.5],OR:[44.0,-120.5],PA:[41.2,-77.2],RI:[41.7,-71.5],SC:[34.0,-81.0],
-        SD:[44.5,-100.2],TN:[35.9,-86.4],TX:[31.5,-99.3],UT:[39.3,-111.7],VT:[44.0,-72.7],
-        VA:[37.5,-79.0],WA:[47.4,-120.7],WV:[38.6,-80.6],WI:[44.5,-89.8],WY:[43.0,-107.6],
-        DC:[38.9,-77.0],PR:[18.2,-66.5],VI:[18.3,-64.9],GU:[13.4,144.8],AS:[-14.3,-170.7],MP:[15.2,145.7]
-      };
-
       const ops = SA.state.fema.filtered;
-      // Group by state to avoid stacking
       const byState = {};
       ops.forEach(d => { if (!byState[d.state]) byState[d.state] = []; byState[d.state].push(d); });
 
       Object.entries(byState).forEach(([st, decls]) => {
-        const coords = centroids[st];
+        const coords = STATE_CENTROIDS[st];
         if (!coords) return;
+        const primaryType = decls[0].incidentType;
+        const size = Math.min(18 + decls.length * 2, 30);
         const graphic = new Graphic({
           geometry: new Point({ longitude: coords[1], latitude: coords[0] }),
-          symbol: new SimpleMarkerSymbol({
-            style: 'square',
-            color: [30, 74, 109, 0.85],
-            size: Math.min(8 + decls.length * 3, 20),
-            outline: { color: [255, 255, 255, 0.9], width: 1.5 }
+          symbol: new PictureMarkerSymbol({
+            url: femaMarkerUrl(primaryType),
+            width: size,
+            height: size
           }),
           attributes: { ...decls[0], _count: decls.length, _all: decls, _source: 'fema' }
         });
@@ -148,15 +224,14 @@
         const acres = f.DailyAcres || f.CalculatedAcres || 0;
         const pct = f.PercentContained ?? 0;
         const color = pct < 25 ? [220, 38, 38] : pct < 75 ? [234, 138, 0] : [34, 139, 34];
-        const size = Math.min(6 + Math.sqrt(acres) * 0.15, 24);
+        const size = Math.min(14 + Math.sqrt(acres) * 0.15, 32);
 
         const graphic = new Graphic({
           geometry: new Point({ longitude: f.longitude, latitude: f.latitude }),
-          symbol: new SimpleMarkerSymbol({
-            style: 'triangle',
-            color: [...color, 0.85],
-            size: size,
-            outline: { color: [255, 255, 255, 0.9], width: 1 }
+          symbol: new PictureMarkerSymbol({
+            url: fireMarkerUrl(color[0], color[1], color[2]),
+            width: size,
+            height: size
           }),
           attributes: { ...f, _source: 'fires' }
         });
@@ -175,15 +250,14 @@
         const color = q.alert === 'red' ? [220, 38, 38] :
                       q.alert === 'orange' ? [234, 138, 0] :
                       q.alert === 'yellow' ? [202, 178, 0] : [109, 76, 141];
-        const size = Math.max(6, (q.mag - 2) * 6);
+        const size = Math.max(16, (q.mag - 2) * 8);
 
         const graphic = new Graphic({
           geometry: new Point({ longitude: q.longitude, latitude: q.latitude }),
-          symbol: new SimpleMarkerSymbol({
-            style: 'circle',
-            color: [...color, 0.7],
-            size: size,
-            outline: { color: [...color, 1], width: 1.5 }
+          symbol: new PictureMarkerSymbol({
+            url: quakeMarkerUrl(color[0], color[1], color[2]),
+            width: size,
+            height: size
           }),
           attributes: { ...q, _source: 'quakes' }
         });
@@ -400,6 +474,23 @@
 
     // ---- State Picker ----
 
+    function zoomToSelectedStates() {
+      var sel = SA.state.selectedStates;
+      if (!sel.length) {
+        view.goTo({ center: [-90, 35], zoom: 4 }, { duration: 800 });
+        return;
+      }
+      var points = sel.map(function(st) {
+        var c = STATE_CENTROIDS[st];
+        return c ? new Point({ longitude: c[1], latitude: c[0] }) : null;
+      }).filter(Boolean);
+      if (points.length === 1) {
+        view.goTo({ target: points[0], zoom: 7 }, { duration: 800 });
+      } else if (points.length > 1) {
+        view.goTo(points, { duration: 800 });
+      }
+    }
+
     function onStateChange(sourceId) {
       SA.state.selectedStates = getComboboxValues(sourceId);
       SA.saveSelectedStates();
@@ -407,6 +498,7 @@
       SA.filterBySelectedStates();
       SA.computeStatus();
       renderAllLayers();
+      zoomToSelectedStates();
     }
 
     document.getElementById('statePicker')?.addEventListener('calciteComboboxChange', () => onStateChange('statePicker'));
